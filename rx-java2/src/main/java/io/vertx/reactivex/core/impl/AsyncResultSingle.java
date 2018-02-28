@@ -9,6 +9,7 @@ import io.vertx.core.Handler;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -43,6 +44,7 @@ public class AsyncResultSingle<T> extends Single<T> {
           if (!disposed.getAndSet(true)) {
             if (ar.succeeded()) {
               try {
+                Objects.requireNonNull(ar.result(), "The mapper function returned a null value.");
                 observer.onSuccess(ar.result());
               } catch (Exception err) {
                 log.error("Unexpected error", err);
